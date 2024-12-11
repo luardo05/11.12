@@ -1,0 +1,55 @@
+delimiter $$
+
+-- Trigger para atualizar estoque e valor total ao adicionar um item à venda
+create trigger trg_aft_insert_itensvendaprod after insert
+on itensvendaprod
+for each row
+begin
+    -- Atualiza a quantidade em estoque do produto
+    update produto
+    set quantidade = quantidade - new.quantidade
+    where idProduto = new.Produto_idProduto;
+
+    -- Atualiza o valor total da venda
+    update venda
+    set valorTotal = valorTotal + 
+                     (new.valorDeVenda * new.quantidade - new.descontoProd)
+    where idVenda = new.Venda_idVenda;
+end $$
+
+-- Trigger para atualizar estoque e valor total ao remover um item da venda
+create trigger trg_aft_delete_itensvendaprod after delete
+on itensvendaprod
+for each row
+begin
+    -- Atualiza a quantidade em estoque do produto
+    update produto
+    set quantidade = quantidade + old.quantidade
+    where idProduto = old.Produto_idProduto;
+
+    -- Atualiza o valor total da venda
+    update venda
+    set valorTotal = valorTotal - 
+                     (old.valorDeVenda * old.quantidade - old.descontoProd)
+    where idVenda = old.Venda_idVenda;
+end $$
+
+-- Trigger para atualizar estoque e valor total ao alterar um item na venda
+create trigger trg_aft_update_itensvendaprod after update
+on itensvendaprod
+for each row
+begin
+    -- Atualiza a quantidade em estoque do produto
+    update produto
+    set quantidade = quantidade + old.quantidade - new.quantidade
+    where idProduto = new.Produto_idProduto;
+
+    -- Atualiza o valor total da venda
+    update venda
+    set valorTotal = valorTotal - 
+                     (old.valorDeVenda * old.quantidade - old.descontoProd) + 
+                     (new.valorDeVenda * new.quantidade - new.descontoProd)
+    where idVenda = new.Venda_idVenda;
+end $$
+
+delimiter ;
