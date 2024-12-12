@@ -1,6 +1,5 @@
 delimiter $$
 
--- Trigger para atualizar estoque e valor total ao adicionar um item à venda
 create trigger trg_aft_insert_itensvendaprod after insert
 on itensvendaprod
 for each row
@@ -17,7 +16,6 @@ begin
     where idVenda = new.Venda_idVenda;
 end $$
 
--- Trigger para atualizar estoque e valor total ao remover um item da venda
 create trigger trg_aft_delete_itensvendaprod after delete
 on itensvendaprod
 for each row
@@ -34,7 +32,6 @@ begin
     where idVenda = old.Venda_idVenda;
 end $$
 
--- Trigger para atualizar estoque e valor total ao alterar um item na venda
 create trigger trg_aft_update_itensvendaprod after update
 on itensvendaprod
 for each row
