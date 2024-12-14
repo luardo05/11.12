@@ -16,6 +16,8 @@ begin
     where idVenda = new.Venda_idVenda;
 end $$
 
+---------------------------------------------------------------------------------------------
+
 create trigger trg_aft_delete_itensvendaprod after delete
 on itensvendaprod
 for each row
@@ -31,6 +33,9 @@ begin
                      (old.valorDeVenda * old.quantidade - old.descontoProd)
     where idVenda = old.Venda_idVenda;
 end $$
+
+---------------------------------------------------------------------------------------------
+
 
 create trigger trg_aft_update_itensvendaprod after update
 on itensvendaprod
